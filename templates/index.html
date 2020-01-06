@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Nearby Shops{% endblock %}
+{% block style %}
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/custom_styles.css' %}" rel="stylesheet">
+
+{% endblock %}
+{% block navbar %}
+
+    {% include "navigation_bar.html" %}
+
+{% endblock %}
+
+{% block body %}
+    <!-- Page Content -->
+    <div class="container">
+
+
+        <br>
+        <!-- Page Features -->
+        <div class="row text-center" id="page_features"></div>
+        <!-- /.row -->
+
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+
+    <script>
+
+        navigator.geolocation.getCurrentPosition(send);
+        //
+        function send(position) {
+            $(document).ready(function () {
+                $.ajax({
+                    headers: {"X-CSRFToken": '{{csrf_token}}'},
+                    url: '{% url 'save_events_json' %}',
+                    type: "POST",
+                    contentType: 'application/json',
+                    data: {
+                        'Latitude': position.coords.latitude,
+                        'Longitude': position.coords.longitude,
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        var content = "";
+                        for (var x = 0; x < data.length; x++) {
+
+                            content += "<div class=\"col-lg-3 col-md-6 mb-4\"> ";
+                            content += "<div class=\"card h-100\"> ";
+                            content += "<img class=\"card-img-top\" src=\" /media/" + data[x].fields.model_pic + "\" alt=\"\"> ";
+                            content += "<div class=\"card-body\"> ";
+                            content += "<h4 class=\"card-title\">" + data[x].fields.name + "</h4> ";
+                            content += "<p class=\"card-text\">" + data[x].fields.description + "</p>";
+                            content += "</div> ";
+                            content += "<div class=\"card-footer\"> ";
+                            var url_Dislike = "{% url 'addDislikedShop' 12345 %}".replace(/12345/, data[x].pk.toString());
+                            content += "<a href=\" " + url_Dislike + "\" class=\"btn btn-danger\">Dislike</a> ";
+                            var url_like = "{% url 'addPreferredShop'  12345 %}".replace(/12345/, data[x].pk.toString());
+                            content += "<a href=\" " + url_like + "\" class=\"btn btn-success\">Like</a> ";
+                            content += "</div> ";
+                            content += "</div> ";
+                            content += "</div> ";
+                        }
+                        $("#page_features").append(content);
+
+                    }
+                })
+            });
+        }
+
+
+    </script>
+
+    <script src="{% static 'scripts/jquery.min.js' %}"></script>
+    <script src="{% static 'scripts/bootstrap.bundle.min.js' %}"></script>
+{% endblock %}
+

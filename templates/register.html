@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}bienvenu{% endblock %}
+{% block style %}
+    <style>
+        body {
+            background-image: url('{% static 'images/background.jpg' %}');
+        }
+    </style>
+    <link href="{% static 'css/login_style.css' %}" rel="stylesheet">{% endblock %}
+{% block body %}
+    <div id="container">
+        <!-- connection area -->
+
+        <form action="{% url 'signup' %}" method="POST">
+            {% csrf_token %}
+            <a href="{% url 'authentification' %}">Back</a>
+            <h2>Register your account</h2>
+
+            <label><b>Email address</b> <b style="color:red">*</b></label>
+            <input type="text" placeholder="Enter your mail address" name="email" required>
+
+            <label><b>Password</b> <b style="color:red">*</b></label>
+            <input type="password" placeholder="Enter you password" name="password" required>
+
+            <label><b>Confirm your password</b> <b style="color:red">*</b></label>
+            <input type="password" placeholder="Confirm your password" name="password_confirm" required>
+
+            <input type="submit" id='submit' value='Sign up'>
+
+        </form>
+
+    </div>
+{% endblock %}

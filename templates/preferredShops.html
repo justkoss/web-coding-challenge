@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Preferred Shops{% endblock %}
+{% block style %}
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/custom_styles.css' %}" rel="stylesheet">
+
+{% endblock %}
+{% block navbar %}
+
+    {% include "navigation_bar.html" %}
+
+{% endblock %}
+
+{% block body %}
+    <!-- Page Content -->
+    <div class="container">
+
+        <br>
+        <!-- Page Features -->
+        <div class="row text-center">
+
+
+            {% for p in preferred_shops %}
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="card h-100">
+                        <img class="card-img-top" src="{{ p.Shop.model_pic.url }}" alt="">
+                        <div class="card-body">
+                            <h4 class="card-title">{{ p.Shop.name }}</h4>
+                            <p class="card-text">{{ p.Shop.description }}</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{% url 'deletePreferredShop' p.Shop.id %}" class="btn btn-danger">Remove</a>
+
+                        </div>
+                    </div>
+                </div>
+
+            {% endfor %}
+
+        </div>
+        <!-- /.row -->
+
+    </div>
+{% endblock %}
+{% block scripts %}
+
+    <script src="{% static 'scripts/jquery.min.js' %}"></script>
+    <script src="{% static 'scripts/bootstrap.bundle.min.js' %}"></script>
+{% endblock %}
