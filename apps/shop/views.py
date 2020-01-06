@@ -43,7 +43,7 @@ def save_events_json(request):
         shops = Shop.objects.raw('''
         SELECT * , POWER( s.long - (%s), 2 ) + POWER( s.lat - (%s), 2 ) AS distance FROM shop_shop s 
         LEFT JOIN shop_disliked_shops d ON s.id = d.Shop_id LEFT JOIN shop_preferred_shops p ON s.id = p.Shop_id 
-        WHERE  d.CustomUser_id != %s  OR p.CustomUser_id != %s OR (d.CustomUser_id IS NULL  AND p.CustomUser_id IS NULL)
+        WHERE  d.CustomUser_id != %s  OR p.CustomUser_id != %s OR (d.id IS NULL  AND p.id IS NULL)
         ORDER BY distance ;''', [Longitude, Latitude, current_user, current_user])
         data = serializers.serialize('json', shops)
         return HttpResponse(data, content_type='application/json')
